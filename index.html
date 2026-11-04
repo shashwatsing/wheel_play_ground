@@ -8,7 +8,7 @@
 :root {
   --bg: #f3f4f6; --panel: #ffffff; --ink: #161a20; --ink2: #4b5462; --muted: #7a8391; --rule: #dde1e7;
   --accent: #c4561a; --accent-ink: #ffffff; --ground: #c9d6e6; --ground-line: #2a4a73; --wheel: #c4561a; --hub: #3d4450;
-  --trail: #2a78d6; --finish: #1baf7a; --sky: #fbfbfc; --ok: #1b8a5a; --bad: #b4441a; --tab: #eceff3;
+  --trail: #2a78d6; --finish: #1baf7a; --sky: #fbfbfc; --ok: #1b8a5a; --bad: #b4441a;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
@@ -16,110 +16,74 @@
   :root {
     --bg: #0f1216; --panel: #171b22; --ink: #e6e9ee; --ink2: #b3bac5; --muted: #8b94a3; --rule: #2a303a;
     --accent: #ef8a4c; --accent-ink: #1a0f08; --ground: #2b3a4e; --ground-line: #86b6ef; --wheel: #ef8a4c; --hub: #c9ced6;
-    --trail: #6da7ec; --finish: #3fcf98; --sky: #12161c; --ok: #4cc98c; --bad: #ef8a4c; --tab: #1f252e;
+    --trail: #6da7ec; --finish: #3fcf98; --sky: #12161c; --ok: #4cc98c; --bad: #ef8a4c;
   }
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; }
-body { background: var(--bg); color: var(--ink); font: 14px/1.45 var(--font); display: grid; grid-template-rows: auto 1fr; }
-header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--rule); }
+body { background: var(--bg); color: var(--ink); font: 14px/1.45 var(--font); display: grid; grid-template-rows: auto auto minmax(380px, 1fr) auto; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--rule); }
 header h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
-.tabs { display: flex; gap: 4px; background: var(--tab); padding: 3px; border-radius: 8px; }
-.tabs button { border: 0; background: transparent; color: var(--ink2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font: 600 13.5px var(--font); }
-.tabs button[aria-selected="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-.setup { font: 12.5px var(--mono); color: var(--muted); margin-left: auto; }
-.page { display: grid; grid-template-columns: 320px 1fr; min-height: 0; }
-.page[hidden] { display: none; }              /* the display rule above would otherwise override [hidden] */
-@media (max-width: 860px) { .page { grid-template-columns: 1fr; } .setup { margin-left: 0; } }
-aside { background: var(--panel); border-right: 1px solid var(--rule); padding: 16px 16px 24px; overflow-y: auto; display: grid; gap: 16px; align-content: start; }
-.view { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; min-height: 0; }
-h2 { font: 600 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
-.ctl { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; margin-bottom: 8px; }
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--panel); border-bottom: 1px solid var(--rule); }
+@media (max-width: 900px) { .controls { grid-template-columns: 1fr; } }
+.group { padding: 10px 16px 12px; border-right: 1px solid var(--rule); min-width: 0; }
+.group:last-child { border-right: 0; }
+@media (max-width: 900px) { .group { border-right: 0; border-bottom: 1px solid var(--rule); } }
+h2 { font: 600 11.5px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.ctl { display: grid; grid-template-columns: 112px minmax(0, 1fr) 58px; gap: 8px; align-items: center; min-height: 26px; }
 .ctl label { font-size: 13px; color: var(--ink2); }
-.ctl output { font: 12.5px var(--mono); color: var(--ink); text-align: right; min-width: 56px; }
-.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); }
+.ctl output { font: 12.5px var(--mono); color: var(--ink); text-align: right; }
+.ctl input[type=range] { width: 100%; margin: 0; accent-color: var(--accent); }
+.ctl select { grid-column: 2 / -1; }
 select, button { font: inherit; }
-select { width: 100%; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); color: var(--ink); margin-bottom: 10px; }
-.presets { display: flex; flex-wrap: wrap; gap: 6px; }
-.presets button, .btn { border: 1px solid var(--rule); background: transparent; color: var(--ink2); border-radius: 999px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
-.presets button:hover, .btn:hover { border-color: var(--accent); color: var(--accent); }
-.warn { color: var(--bad); font-size: 12.5px; min-height: 1em; }
+select { width: 100%; padding: 3px 6px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); color: var(--ink); }
+.warn { color: var(--bad); font-size: 12.5px; }
 .hint { font-size: 12.5px; color: var(--muted); }
-.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--rule); background: var(--panel); }
-.bar button { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-.bar button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-.bar button:disabled { opacity: 0.5; cursor: default; }
-.bar .spacer { flex: 1; }
-.bar label { font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 6px; }
-.stage { position: relative; min-height: 340px; background: var(--sky); }
+.row { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 6px; }
+.row label { font-size: 13px; color: var(--ink2); display: flex; align-items: center; gap: 5px; }
+.btn { border: 1px solid var(--rule); background: var(--panel); color: var(--ink); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn.small { padding: 1px 9px; font-size: 12px; color: var(--ink2); border-radius: 999px; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.stage { position: relative; background: var(--sky); min-height: 380px; }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .facts { position: absolute; left: 12px; top: 10px; font: 12.5px var(--mono); color: var(--ink2); background: color-mix(in srgb, var(--panel) 88%, transparent);
-  border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; display: grid; grid-template-columns: auto auto; gap: 2px 12px; max-width: calc(100% - 24px); }
+  border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; display: grid; grid-template-columns: auto auto; gap: 1px 12px; max-width: calc(100% - 180px); }
 .facts b { color: var(--ink); font-weight: 600; }
+.facts .sep { grid-column: 1 / -1; border-top: 1px solid var(--rule); margin: 3px 0; }
 .status { font-weight: 600; }
 .status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
-.foot { padding: 10px 14px 14px; border-top: 1px solid var(--rule); background: var(--panel); font-size: 13px; }
-.row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.foot { padding: 8px 16px 12px; border-top: 1px solid var(--rule); background: var(--panel); font-size: 13px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .chip { font: 12px var(--mono); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); }
 .chip.ok { border-color: var(--ok); color: var(--ok); } .chip.bad { border-color: var(--bad); color: var(--bad); }
-.mini { display: grid; grid-template-columns: 84px 1fr; gap: 10px; align-items: center; }
-.mini canvas { width: 84px; height: 84px; }
-.mini p { margin: 0; font-size: 12.5px; color: var(--ink2); }
-.mini a { color: var(--accent); cursor: pointer; text-decoration: underline; }
+details { margin-top: 6px; }
 details summary { cursor: pointer; color: var(--ink2); font-size: 13px; }
-details p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink2); }
+details p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink2); max-width: 110ch; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
 </head>
 <body>
 <header>
   <h1>Wheel–leg playground</h1>
-  <div class="tabs" role="tablist">
-    <button role="tab" id="tab-wheel" aria-selected="true" aria-controls="page-wheel">1 · Wheel</button>
-    <button role="tab" id="tab-terrain" aria-selected="false" aria-controls="page-terrain">2 · Terrain</button>
-    <button role="tab" id="tab-drive" aria-selected="false" aria-controls="page-drive">3 · Drive</button>
-  </div>
-  <div class="setup" id="setup"></div>
+  <span class="hint">Change any setting and the run starts again with it.</span>
 </header>
 
-<!-- 1 wheel -->
-<section class="page" id="page-wheel" role="tabpanel" aria-labelledby="tab-wheel">
-  <aside>
-    <div>
-      <h2>Presets</h2>
-      <div class="presets" id="wheelPresets"></div>
-    </div>
-    <div>
-      <h2>Shape</h2>
-      <div class="ctl"><label for="k">Feet (k)</label><output id="k-v"></output><input id="k" type="range" min="1" max="6" step="1"></div>
-      <div class="ctl"><label for="cov">Coverage</label><output id="cov-v"></output><input id="cov" type="range" min="0.05" max="1" step="0.005"></div>
-      <div class="ctl"><label for="curv">Curvature</label><output id="curv-v"></output><input id="curv" type="range" min="-1" max="4" step="0.01"></div>
-      <div class="ctl"><label for="anchor">Anchor</label><output id="anchor-v"></output><input id="anchor" type="range" min="0" max="1" step="0.01"></div>
-      <div class="ctl"><label for="tilt">Tilt</label><output id="tilt-v"></output><input id="tilt" type="range" min="-90" max="90" step="1"></div>
-      <div class="warn" id="wheelWarn"></div>
-    </div>
-    <details open>
-      <summary>What the five numbers do</summary>
-      <p><b>Feet</b>: number of identical feet. <b>Coverage</b>: foot length as a share of the rim (1 with curvature 1 and tilt 0 is round).
-        <b>Curvature</b>: foot curvature × 23 mm (1 follows the rim, 0 straight, 2 a C-leg, negative bends inward). <b>Anchor</b>: where the
-        reach point sits along the foot (0 or 1 at an end). <b>Tilt</b>: angle between the foot and the rim at the reach point (±90° = spoke).</p>
-      <p>Every foot passes through a point 23 mm from the hub (25 mm reach with a 2 mm thick rim). A strut joins each foot's innermost point to the hub.
-        The wheel rolls clockwise (to the right).</p>
-    </details>
-  </aside>
-  <div class="view">
-    <div class="stage" style="grid-row: 1 / -1">
-      <canvas id="wheelView" aria-label="Wheel shape"></canvas>
-      <div class="facts" id="wheelFacts"></div>
-    </div>
+<section class="controls">
+  <div class="group">
+    <h2>Wheel</h2>
+    <div class="ctl"><label for="preset">Preset</label><select id="preset" aria-label="Wheel preset"></select></div>
+    <div class="ctl"><label for="k">Feet (k)</label><input id="k" type="range" min="1" max="6" step="1"><output id="k-v"></output></div>
+    <div class="ctl"><label for="cov">Coverage</label><input id="cov" type="range" min="0.05" max="1" step="0.005"><output id="cov-v"></output></div>
+    <div class="ctl"><label for="curv">Curvature</label><input id="curv" type="range" min="-1" max="4" step="0.01"><output id="curv-v"></output></div>
+    <div class="ctl"><label for="anchor">Anchor</label><input id="anchor" type="range" min="0" max="1" step="0.01"><output id="anchor-v"></output></div>
+    <div class="ctl"><label for="tilt">Tilt</label><input id="tilt" type="range" min="-90" max="90" step="1"><output id="tilt-v"></output></div>
+    <div class="warn" id="wheelWarn"></div>
   </div>
-</section>
-
-<!-- 2 terrain -->
-<section class="page" id="page-terrain" role="tabpanel" aria-labelledby="tab-terrain" hidden>
-  <aside>
-    <div>
-      <h2>Ground type</h2>
+  <div class="group">
+    <h2>Ground</h2>
+    <div class="ctl"><label for="ttype">Type</label>
       <select id="ttype" aria-label="Ground type">
         <option value="blocks">Block field (A, w, β)</option>
         <option value="step">Single step</option>
@@ -127,69 +91,61 @@ details p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink2); }
         <option value="pit">Pit (trench)</option>
         <option value="ramp">Smooth ramp</option>
         <option value="flat">Flat</option>
-      </select>
-      <div id="tctl"></div>
-      <button class="btn" id="reseed" hidden>New random terrain</button>
+      </select></div>
+    <div id="tctl"></div>
+    <div class="row"><button class="btn small" id="reseed">New random terrain</button></div>
+  </div>
+  <div class="group">
+    <h2>Drive</h2>
+    <div class="ctl"><label for="phase">Start angle</label><input id="phase" type="range" min="0" max="359" step="1"><output id="phase-v"></output></div>
+    <div class="ctl"><label for="speed">Playback</label><input id="speed" type="range" min="0" max="4" step="1"><output id="speed-v"></output></div>
+    <div class="ctl"><label for="zoom">Zoom</label><input id="zoom" type="range" min="4" max="30" step="1"><output id="zoom-v"></output></div>
+    <div class="row">
+      <label><input type="checkbox" id="follow" checked> Camera follows</label>
+      <label><input type="checkbox" id="loopOn" checked> Replay when done</label>
     </div>
-    <details open>
-      <summary>Block field</summary>
-      <p>Random block heights h ∈ [0, 1] on blocks w long. Ground z = A · [(1 − β) · smooth + β · blocks], where "blocks" has flat tops and vertical
-        edges and "smooth" joins the same heights with cosine ramps. β = 1: sharp blocks; β = 0: smooth hills. Finish: 0.5 m into the field.</p>
-      <p>Other grounds: a single step, stairs, a trench to cross (starting on the raised deck), a smooth cosine ramp, flat ground.</p>
-    </details>
-  </aside>
-  <div class="view">
-    <div class="stage" style="grid-row: 1 / -1">
-      <canvas id="terrainView" aria-label="Terrain profile"></canvas>
-      <div class="facts" id="terrainFacts"></div>
+    <div class="row">
+      <button class="btn primary" id="play">Pause</button>
+      <button class="btn" id="restart">Restart</button>
+      <button class="btn" id="batch">Test 12 start angles</button>
     </div>
   </div>
 </section>
 
-<!-- 3 drive -->
-<section class="page" id="page-drive" role="tabpanel" aria-labelledby="tab-drive" hidden>
-  <aside>
-    <div>
-      <h2>Setup</h2>
-      <div class="mini"><canvas id="miniWheel" width="168" height="168" aria-label="Chosen wheel"></canvas>
-        <p id="miniText"></p></div>
-    </div>
-    <div>
-      <h2>Drive</h2>
-      <div class="ctl"><label for="phase">Start angle</label><output id="phase-v"></output><input id="phase" type="range" min="0" max="359" step="1"></div>
-      <div class="ctl"><label for="speed">Playback speed</label><output id="speed-v"></output><input id="speed" type="range" min="0" max="4" step="1"></div>
-      <div class="ctl"><label for="zoom">Zoom</label><output id="zoom-v"></output><input id="zoom" type="range" min="4" max="30" step="1"></div>
-      <label class="hint"><input type="checkbox" id="follow" checked> Camera follows the wheel</label>
-    </div>
-    <details>
-      <summary>About this model</summary>
-      <p>One driven wheel on a carriage that can move forward and up and down but not tilt. 42.2 g carried by the wheel (34.2 g carriage + 8 g wheel),
-        3.7 V gearmotor at full power (stall 0.191 N·m, no-load 8.4 rad/s, rotor inertia 2×10⁻⁴ kg·m²), friction 0.8, hub (5 mm radius) can touch the ground.
-        A run fails if the wheel gains less than 5 mm in 2 s or reaches the time limit.</p>
-      <p>This is a 2D model (Box2D, via planck.js) of the 3D MuJoCo rig used in the study: results are close to the study's but not identical,
-        and its random terrains are not the study's terrains.</p>
-    </details>
-  </aside>
-  <div class="view">
-    <div class="bar">
-      <button id="play" class="primary">Drive</button>
-      <button id="reset">Reset</button>
-      <button id="batch">Test 12 start angles</button>
-      <span class="spacer"></span>
-      <span class="hint">Change the wheel or ground in tabs 1 and 2.</span>
-    </div>
-    <div class="stage">
-      <canvas id="view" aria-label="Simulation view"></canvas>
-      <div class="facts" aria-live="polite">
-        <span>time</span><b id="hTime">0.00 s</b>
-        <span>distance</span><b id="hDist">0 mm</b>
-        <span>speed</span><b id="hSpeed">0 mm/s</b>
-        <span>status</span><b id="hStatus" class="status">ready</b>
-      </div>
-    </div>
-    <div class="foot" id="results"><span class="hint">"Test 12 start angles" runs the wheel from 12 evenly spaced start angles (as in the study) and reports how many get across and how fast.</span></div>
+<main class="stage">
+  <canvas id="view" aria-label="Wheel driving over the ground"></canvas>
+  <div class="facts" aria-live="polite">
+    <span>time</span><b id="hTime">0.00 s</b>
+    <span>distance</span><b id="hDist">0 mm</b>
+    <span>speed</span><b id="hSpeed">0 mm/s</b>
+    <span>status</span><b id="hStatus" class="status">ready</b>
+    <span class="sep"></span>
+    <span>contact</span><b id="fContact"></b>
+    <span>foot length</span><b id="fLen"></b>
+    <span>largest gap</span><b id="fGap"></b>
+    <span>reach (dashed)</span><b>25 mm</b>
+    <span>tallest edge</span><b id="fEdge"></b>
   </div>
-</section>
+</main>
+
+<footer class="foot">
+  <div id="results"><span class="hint">"Test 12 start angles" runs the wheel from 12 evenly spaced start angles (as in the study) and reports how many get across and how fast.</span></div>
+  <details>
+    <summary>What the settings mean</summary>
+    <p><b>Feet</b>: number of identical feet. <b>Coverage</b>: foot length as a share of the rim (1 with curvature 1 and tilt 0 is round).
+      <b>Curvature</b>: foot curvature × 23 mm (1 follows the rim, 0 straight, 2 a C-leg, negative bends inward). <b>Anchor</b>: where the
+      reach point sits along the foot (0 or 1 at an end). <b>Tilt</b>: angle between the foot and the rim at the reach point (±90° = spoke).
+      Every foot passes through a point 23 mm from the hub (25 mm reach with a 2 mm thick rim); a strut joins each foot's innermost point to the hub.
+      The wheel rolls clockwise (to the right).</p>
+    <p><b>Block field</b>: random block heights h ∈ [0, 1] on blocks w long; ground z = A · [(1 − β) · smooth + β · blocks], where "blocks" has flat tops
+      and vertical edges and "smooth" joins the same heights with cosine ramps (β = 1 sharp blocks, β = 0 smooth hills); finish 0.5 m into the field.
+      Other grounds: a single step, stairs, a trench to cross (starting on the raised deck), a smooth cosine ramp, flat ground.</p>
+    <p><b>Model</b>: one driven wheel on a carriage that can move forward and up and down but not tilt; 42.2 g carried by the wheel (34.2 g carriage + 8 g wheel);
+      3.7 V gearmotor at full power (stall 0.191 N·m, no-load 8.4 rad/s, rotor inertia 2×10⁻⁴ kg·m²); friction 0.8; the hub (5 mm radius) can touch the ground.
+      A run fails if the wheel gains less than 5 mm in 2 s or reaches the time limit. This is a 2D model (Box2D, via planck.js) of the 3D MuJoCo rig
+      used in the study: results are close to the study's but not identical, and its random terrains are not the study's terrains.</p>
+  </details>
+</footer>
 
 <script>
 /* planck.js 1.0.6 (Box2D port), MIT licence, inlined so this file works offline */
@@ -403,16 +359,8 @@ const PRESETS = {
 const W_IDS = ["k", "cov", "curv", "anchor", "tilt"];
 const fmt = { k: v => v, cov: v => (+v).toFixed(2), curv: v => (+v).toFixed(2), anchor: v => (+v).toFixed(2), tilt: v => v + "°" };
 const SPEEDS = [0.1, 0.25, 0.5, 1, 2];
-let W = null, TER = null, TINFO = null, SIM = null, running = false, batchBusy = false, tab = "wheel";
-
-/* tabs */
-["wheel", "terrain", "drive"].forEach(t => $("tab-" + t).addEventListener("click", () => setTab(t)));
-function setTab(t) {
-  tab = t;
-  ["wheel", "terrain", "drive"].forEach(x => { $("tab-" + x).setAttribute("aria-selected", x === t); $("page-" + x).hidden = x !== t; });
-  if (t === "drive") { running = false; $("play").textContent = "Drive"; if (!SIM) reset(); drawMini(); }
-  redraw();
-}
+const REPLAY_MS = 1500;
+let W = null, TER = null, SIM = null, paused = false, batchBusy = false, dirty = true, doneAt = null;
 
 /* canvas helper: world units in cm, y up */
 function prep(c) {
@@ -430,47 +378,31 @@ function drawWheelShape(g, w, ang, lw) {
   g.restore();
 }
 
-/* ---------- 1 wheel */
+/* ---------- wheel */
 function readWheel() {
   const [k, c, cv, a, t] = W_IDS.map(i => +$(i).value);
   W_IDS.forEach(i => $(i + "-v").textContent = fmt[i]($(i).value));
   W = wheelGeom(k, c, cv, t, a); W.k = k; W.p = { k, c, cv, a, t };
   $("wheelWarn").textContent = W.err || "";
-  SIM = null; updateSetup(); redraw();
+  wheelFacts(); dirty = true;
 }
 function wheelFacts() {
-  if (W.err) return [["shape", "not buildable"]];
+  if (W.err) { $("fContact").textContent = "not buildable"; $("fLen").textContent = $("fGap").textContent = "—"; return; }
   const angs = [];
   W.lines.forEach(l => l.forEach(p => { if (Math.hypot(p[0], p[1]) > 0.6 * Rp) angs.push(Math.atan2(p[1], p[0])); }));
   angs.sort((a, b) => a - b);
   let gap = 0; for (let i = 0; i < angs.length; i++) gap = Math.max(gap, ((i + 1 < angs.length ? angs[i + 1] : angs[0] + TWO) - angs[i]));
-  const ell = W.p.c * TWO * Rp / W.p.k * 10;
-  return [["contact with ground", W.round ? "continuous (round)" : "discrete (feet)"], ["feet", W.p.k],
-          ["foot length", W.round ? "—" : ell.toFixed(1) + " mm"], ["largest gap seen from hub", (gap * 180 / Math.PI).toFixed(1) + "°"],
-          ["reach", "25 mm"]];
-}
-function drawWheelView() {
-  const { g, dpr, W: cw, H: ch } = prep($("wheelView")), s = css();
-  const sc = Math.min(cw, ch) / (2 * R * 1.35);
-  g.setTransform(sc, 0, 0, -sc, cw / 2, ch / 2 + 0.06 * ch);
-  g.setLineDash([0.12, 0.12]); g.strokeStyle = s.getPropertyValue("--muted"); g.lineWidth = 1 * dpr / sc;
-  g.beginPath(); g.arc(0, 0, R, 0, TWO); g.stroke(); g.setLineDash([]);
-  if (!W.err) drawWheelShape(g, W, 0);
-  // rolling direction arrow
-  g.strokeStyle = s.getPropertyValue("--muted"); g.lineWidth = 1.4 * dpr / sc; g.beginPath(); g.arc(0, 0, R * 1.18, 0.35 * Math.PI, 0.15 * Math.PI, true); g.stroke();
-  const ax = R * 1.18 * Math.cos(0.15 * Math.PI), ay = R * 1.18 * Math.sin(0.15 * Math.PI);
-  g.beginPath(); g.moveTo(ax, ay); g.lineTo(ax - 0.25, ay + 0.28); g.moveTo(ax, ay); g.lineTo(ax - 0.38, ay - 0.05); g.stroke();
-  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = s.getPropertyValue("--muted"); g.font = `${11 * dpr}px ${s.getPropertyValue("--mono")}`;
-  g.fillText("dashed: 25 mm reach · arrow: rolling direction", 12 * dpr, ch - 12 * dpr);
-  $("wheelFacts").innerHTML = wheelFacts().map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("fContact").textContent = W.round ? "continuous (round)" : `${W.p.k} feet`;
+  $("fLen").textContent = W.round ? "—" : (W.p.c * TWO * Rp / W.p.k * 10).toFixed(1) + " mm";
+  $("fGap").textContent = (gap * 180 / Math.PI).toFixed(1) + "°";
 }
 
-/* ---------- 2 terrain */
+/* ---------- ground */
 function buildTerrainCtl() {
   const type = $("ttype").value, box = $("tctl"); box.replaceChildren();
   TERRAIN[type].ctl.forEach(([id, label, mn, mx, st, def]) => {
     const d = document.createElement("div"); d.className = "ctl";
-    d.innerHTML = `<label for="t_${id}">${label}</label><output id="t_${id}-v"></output><input id="t_${id}" type="range" min="${mn}" max="${mx}" step="${st}" value="${def}">`;
+    d.innerHTML = `<label for="t_${id}">${label}</label><input id="t_${id}" type="range" min="${mn}" max="${mx}" step="${st}" value="${def}"><output id="t_${id}-v"></output>`;
     box.appendChild(d); d.querySelector("input").addEventListener("input", readTerrain);
   });
   if (!TERRAIN[type].ctl.length) box.innerHTML = '<div class="hint">No settings: 0.5 m of flat ground.</div>';
@@ -481,62 +413,16 @@ function readTerrain() {
   const type = $("ttype").value, P = {};
   TERRAIN[type].ctl.forEach(([id, , , , , , unit]) => { const v = +$("t_" + id).value; P[id] = v; $("t_" + id + "-v").textContent = (Number.isInteger(v) ? v : v.toFixed(2)) + (unit ? " " + unit : ""); });
   TER = buildTerrain(type, P); TER.type = type; TER.P = P;
-  TINFO = terrainFacts(); SIM = null; updateSetup(); redraw();
-}
-function terrainFacts() {
-  const p = TER.pts, ups = []; let steep = 0;
-  for (let i = 1; i < p.length; i++) {
-    const dx = p[i][0] - p[i - 1][0], dz = p[i][1] - p[i - 1][1];
-    if (p[i][0] > TER.finish + R) break;
-    if (dx < 0.05 && dz > 0.05) ups.push(dz);
-    else if (dx >= 0.05) steep = Math.max(steep, Math.abs(Math.atan2(dz, dx)) * 180 / Math.PI);
-  }
-  const f = [["ground", TERRAIN[TER.type].label], ["up-edges to the finish", ups.length], ["tallest up-edge", ups.length ? (Math.max(...ups) * 10).toFixed(1) + " mm" : "—"],
-             ["steepest ramp", steep > 0.5 ? steep.toFixed(0) + "°" : "—"]];
-  if (TER.type === "blocks") f.push(["block width / wheel size", (TER.P.w / 50).toFixed(2) + " D"]);
-  return f;
-}
-function drawTerrainView() {
-  const { g, dpr, W: cw, H: ch } = prep($("terrainView")), s = css();
-  const x0 = -3, x1 = TER.finish + 6, sc = cw / (x1 - x0), zmax = Math.max(6, ...TER.pts.filter(q => q[0] < x1).map(q => q[1])) ;
-  const scale = Math.min(sc, (ch * 0.62) / (zmax + 2 * R));
-  g.setTransform(scale, 0, 0, -scale, (cw - (x1 - x0) * scale) / 2 - x0 * scale, ch * 0.8);
-  const pts = TER.pts;
-  g.beginPath(); g.moveTo(pts[0][0], -20); pts.forEach(q => g.lineTo(q[0], q[1])); g.lineTo(pts[pts.length - 1][0], -20); g.closePath();
-  g.fillStyle = s.getPropertyValue("--ground"); g.fill();
-  g.beginPath(); pts.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.strokeStyle = s.getPropertyValue("--ground-line"); g.lineWidth = 1.4 * dpr / scale; g.stroke();
-  g.setLineDash([0.3, 0.25]); g.strokeStyle = s.getPropertyValue("--finish"); g.lineWidth = 1.5 * dpr / scale;
-  g.beginPath(); g.moveTo(TER.finish, -1); g.lineTo(TER.finish, zmax + 2 * R); g.stroke();
-  g.strokeStyle = s.getPropertyValue("--muted"); g.beginPath(); g.arc(0, TER.startY + R, R, 0, TWO); g.stroke(); g.setLineDash([]);
-  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = s.getPropertyValue("--muted"); g.font = `${11 * dpr}px ${s.getPropertyValue("--mono")}`;
-  const X = x => (cw - (x1 - x0) * scale) / 2 + (x - x0) * scale;
-  for (let x = 0; x <= x1; x += 10) { g.fillText(`${x * 10} mm`, X(x) - 12 * dpr, ch * 0.8 + 18 * dpr); }
-  g.fillText("finish", X(TER.finish) + 4 * dpr, ch * 0.8 - (zmax + 2 * R) * scale);
-  g.fillText("dashed circle: the 50 mm wheel at the start", 12 * dpr, ch - 10 * dpr);
-  $("terrainFacts").innerHTML = TINFO.map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  const p = TER.pts; let up = 0;
+  for (let i = 1; i < p.length && p[i][0] <= TER.finish + R; i++) if (p[i][0] - p[i - 1][0] < 0.05) up = Math.max(up, p[i][1] - p[i - 1][1]);
+  $("fEdge").textContent = up > 0.05 ? (up * 10).toFixed(1) + " mm" : "no sharp edge";
+  dirty = true;
 }
 
-/* ---------- 3 drive */
-function updateSetup() {
-  if (!W || !TER) return;
-  const w = W.err ? "invalid wheel" : `wheel k=${W.p.k} cov ${W.p.c.toFixed(2)} curv ${W.p.cv.toFixed(2)} anchor ${W.p.a.toFixed(2)} tilt ${W.p.t}°`;
-  const t = TERRAIN[TER.type].label + (TER.type === "blocks" ? ` A ${TER.P.A} mm · w ${TER.P.w} mm · β ${(+TER.P.beta).toFixed(2)} · #${TER.P.seed}` :
-            Object.keys(TER.P).length ? " " + Object.entries(TER.P).map(([k, v]) => `${k} ${v}`).join(" · ") : "");
-  $("setup").textContent = `${w}  |  ${t}`;
-  $("miniText").innerHTML = `${W.err ? "<b>Invalid wheel</b>" : `<b>${W.p.k} feet</b>, coverage ${W.p.c.toFixed(2)}, curvature ${W.p.cv.toFixed(2)}, anchor ${W.p.a.toFixed(2)}, tilt ${W.p.t}°`}<br>${t}<br>
-    <a id="goW">change wheel</a> · <a id="goT">change ground</a>`;
-  $("goW").onclick = () => setTab("wheel"); $("goT").onclick = () => setTab("terrain");
-}
-function drawMini() {
-  const c = $("miniWheel"), g = c.getContext("2d"), sc = c.width / (2 * R * 1.1), s = css();
-  g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, c.width, c.height); g.setTransform(sc, 0, 0, -sc, c.width / 2, c.height / 2);
-  g.setLineDash([0.15, 0.15]); g.strokeStyle = s.getPropertyValue("--muted"); g.lineWidth = 0.04; g.beginPath(); g.arc(0, 0, R, 0, TWO); g.stroke(); g.setLineDash([]);
-  if (!W.err) drawWheelShape(g, W, 0);
-}
-function reset() {
-  running = false; $("play").textContent = "Drive";
+/* ---------- drive */
+function restart() {
   SIM = W.err ? null : makeSim(W, TER, +$("phase").value);
-  setHud(); redraw();
+  doneAt = null; setHud();
 }
 function setHud() {
   const st = $("hStatus");
@@ -545,11 +431,11 @@ function setHud() {
   $("hTime").textContent = td.toFixed(2) + " s"; $("hDist").textContent = Math.round((x - START_X) * 10) + " mm";
   $("hSpeed").textContent = Math.round(v * 10) + " mm/s";
   if (SIM.done) { st.textContent = SIM.done.ok ? `across in ${SIM.done.t.toFixed(2)} s` : SIM.done.why; st.className = "status " + (SIM.done.ok ? "ok" : "bad"); }
-  else { st.textContent = running ? "driving" : (SIM.t > 0 ? "paused" : "ready"); st.className = "status"; }
+  else { st.textContent = batchBusy ? "testing…" : paused ? "paused" : "driving"; st.className = "status"; }
 }
-function drawDrive() {
+function draw() {
   const { g, dpr, W: cw, H: ch } = prep($("view")), s = css(), z = +$("zoom").value * dpr;
-  const cx = SIM && $("follow").checked ? SIM.carriage.getPosition().x + 6 : X0 + 6;
+  const cx = (SIM && $("follow").checked ? SIM.carriage.getPosition().x : START_X) + 0.2 * cw / z;   // wheel at 30% of the width
   const cy = SIM ? SIM.carriage.getPosition().y * 0.4 + 2 : 3;
   g.setTransform(z, 0, 0, -z, cw / 2 - cx * z, ch * 0.62 + cy * z);
   const pts = TER.pts;
@@ -567,28 +453,38 @@ function drawDrive() {
   }
   g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = s.getPropertyValue("--muted"); g.font = `${11 * dpr}px ${s.getPropertyValue("--mono")}`;
   g.fillText("finish", (TER.finish - cx) * z + cw / 2 + 4 * dpr, ch * 0.62 + cy * z - 12 * z);
-}
-function redraw() {
-  if (!W || !TER) return;
-  if (tab === "wheel") drawWheelView(); else if (tab === "terrain") drawTerrainView(); else drawDrive();
+  // wheel shape, top right
+  const r = 64 * dpr, ix = cw - r - 14 * dpr, iy = r + 14 * dpr, sc = r / (R * 1.15);
+  g.fillStyle = s.getPropertyValue("--panel"); g.strokeStyle = s.getPropertyValue("--rule"); g.lineWidth = dpr;
+  g.beginPath(); g.arc(ix, iy, r, 0, TWO); g.fill(); g.stroke();
+  g.setTransform(sc, 0, 0, -sc, ix, iy);
+  g.setLineDash([0.15, 0.15]); g.strokeStyle = s.getPropertyValue("--muted"); g.lineWidth = dpr / sc; g.beginPath(); g.arc(0, 0, R, 0, TWO); g.stroke(); g.setLineDash([]);
+  if (!W.err) drawWheelShape(g, W, 0);
+  g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = s.getPropertyValue("--muted"); g.textAlign = "center";
+  g.fillText("wheel shape", ix, iy + r + 14 * dpr); g.textAlign = "start";
+  if (W.err) { g.fillStyle = s.getPropertyValue("--bad"); g.font = `600 ${14 * dpr}px ${s.getPropertyValue("--font")}`; g.fillText("This wheel can't be built: " + W.err, 16 * dpr, ch - 16 * dpr); }
 }
 let last = 0;
 function loop(ts) {
-  if (tab === "drive" && running && SIM && !SIM.done) {
-    const real = Math.min(0.05, (ts - last) / 1000), n = Math.max(1, Math.round(real * SPEEDS[+$("speed").value] / DT));
-    for (let i = 0; i < n && !SIM.done; i++) { stepSim(SIM); if (Math.round(SIM.t / DT) % 10 === 0) { const q = SIM.carriage.getPosition(); SIM.trail.push([q.x, q.y]); } }
-    if (SIM.done) { running = false; $("play").textContent = "Drive"; }
-    setHud(); drawDrive();
+  if (!batchBusy) {
+    if (dirty) { dirty = false; restart(); }
+    if (SIM && !paused && !SIM.done) {
+      const real = Math.min(0.05, (ts - last) / 1000), n = Math.max(1, Math.round(real * SPEEDS[+$("speed").value] / DT));
+      for (let i = 0; i < n && !SIM.done; i++) { stepSim(SIM); if (Math.round(SIM.t / DT) % 10 === 0) { const q = SIM.carriage.getPosition(); SIM.trail.push([q.x, q.y]); } }
+      if (SIM.done) doneAt = ts;
+      setHud();
+    } else if (SIM && SIM.done && !paused && $("loopOn").checked && doneAt !== null && ts - doneAt > REPLAY_MS) restart();
   }
+  draw();
   last = ts; requestAnimationFrame(loop);
 }
 async function batch() {
   if (W.err || batchBusy) return;
-  batchBusy = true; running = false; $("batch").disabled = true; $("play").disabled = true;
-  const out = $("results"), res = [];
-  out.innerHTML = `<div id="bhead"><b>Testing 12 start angles…</b> <span class="hint" id="bprog">0 / 12</span></div><div class="row" id="brow"></div>`;
+  batchBusy = true; $("batch").disabled = true; $("play").disabled = true; $("restart").disabled = true; setHud();
+  const out = $("results"), res = [], w = W, ter = TER;
+  out.innerHTML = `<div id="bhead"><b>Testing 12 start angles…</b> <span class="hint" id="bprog">0 / 12</span></div><div class="chips" id="brow"></div>`;
   for (let i = 0; i < 12; i++) {
-    const ph = i * (360 / W.k) / 12, S = makeSim(W, TER, ph);
+    const ph = i * (360 / w.k) / 12, S = makeSim(w, ter, ph);
     while (!S.done) { for (let j = 0; j < 400 && !S.done; j++) stepSim(S); await new Promise(r => setTimeout(r, 0)); }
     res.push({ ph, ...S.done });
     $("bprog").textContent = `${i + 1} / 12`;
@@ -596,38 +492,32 @@ async function batch() {
     chip.textContent = `${ph.toFixed(0)}°: ${S.done.ok ? S.done.t.toFixed(2) + " s" : S.done.why}`; $("brow").appendChild(chip);
   }
   const ok = res.filter(r => r.ok), mean = ok.length ? ok.reduce((s, r) => s + r.t, 0) / ok.length : NaN;
-  const charged = res.reduce((s, r) => s + (r.ok ? r.t : TER.tmax), 0) / res.length;
+  const charged = res.reduce((s, r) => s + (r.ok ? r.t : ter.tmax), 0) / res.length;
+  const what = `k=${w.p.k} cov ${w.p.c.toFixed(2)} curv ${w.p.cv.toFixed(2)} anchor ${w.p.a.toFixed(2)} tilt ${w.p.t}° on ${TERRAIN[ter.type].label}` +
+    (ter.type === "blocks" ? ` A ${ter.P.A} mm, w ${ter.P.w} mm, β ${(+ter.P.beta).toFixed(2)}, #${ter.P.seed}` : "");
   $("bhead").innerHTML = `<b>${ok.length} of 12 got across (${Math.round(100 * ok.length / 12)}%)</b> · mean time of those that did: ${ok.length ? mean.toFixed(2) + " s" : "—"} ·
-    mean time with failures charged ${TER.tmax} s: ${charged.toFixed(2)} s`;
-  batchBusy = false; $("batch").disabled = false; $("play").disabled = false;
+    mean time with failures charged ${ter.tmax} s: ${charged.toFixed(2)} s <span class="hint">(${what})</span>`;
+  batchBusy = false; $("batch").disabled = false; $("play").disabled = false; $("restart").disabled = false; setHud();
 }
 
 /* ---------- wire up */
-Object.entries(PRESETS).forEach(([name, v]) => {
-  const b = document.createElement("button"); b.textContent = name;
-  b.addEventListener("click", () => { W_IDS.forEach((id, i) => $(id).value = v[i]); readWheel(); });
-  $("wheelPresets").appendChild(b);
-});
-W_IDS.forEach(id => $(id).addEventListener("input", readWheel));
+const pre = $("preset");
+pre.innerHTML = '<option value="">Choose a preset…</option>' + Object.keys(PRESETS).map(n => `<option>${n}</option>`).join("");
+pre.addEventListener("change", () => { const v = PRESETS[pre.value]; if (!v) return; W_IDS.forEach((id, i) => $(id).value = v[i]); readWheel(); });
+W_IDS.forEach(id => $(id).addEventListener("input", () => { pre.value = ""; readWheel(); }));
 [["k", 3], ["cov", 0.55], ["curv", 1], ["anchor", 0.5], ["tilt", 0]].forEach(([id, v]) => $(id).value = v);
+pre.value = "3 feet, 54° gap";
 $("phase").value = 0; $("speed").value = 3; $("zoom").value = 11;
 const outs = () => { $("phase-v").textContent = $("phase").value + "°"; $("speed-v").textContent = SPEEDS[+$("speed").value] + "×"; $("zoom-v").textContent = $("zoom").value; };
-$("phase").addEventListener("input", () => { outs(); reset(); });
+$("phase").addEventListener("input", () => { outs(); dirty = true; });
 $("speed").addEventListener("input", outs);
-$("zoom").addEventListener("input", () => { outs(); drawDrive(); });
-$("follow").addEventListener("change", drawDrive);
+$("zoom").addEventListener("input", outs);
 $("ttype").addEventListener("change", buildTerrainCtl);
 $("reseed").addEventListener("click", () => { const s = $("t_seed"); s.value = (+s.value % 99) + 1; readTerrain(); });
-$("play").addEventListener("click", () => {
-  if (!SIM || SIM.done) reset();
-  if (!SIM) return;
-  running = !running; $("play").textContent = running ? "Pause" : "Drive"; setHud();
-});
-$("reset").addEventListener("click", reset);
+$("play").addEventListener("click", () => { paused = !paused; $("play").textContent = paused ? "Drive" : "Pause"; if (!paused && SIM && SIM.done) restart(); setHud(); });
+$("restart").addEventListener("click", () => { dirty = true; });
 $("batch").addEventListener("click", batch);
-window.addEventListener("resize", redraw);
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", redraw);
-outs(); readWheel(); buildTerrainCtl(); redraw();
+outs(); readWheel(); buildTerrainCtl();
 requestAnimationFrame(ts => { last = ts; loop(ts); });
 </script>
 </body>
