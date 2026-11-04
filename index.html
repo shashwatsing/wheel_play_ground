@@ -413,6 +413,9 @@ function readTerrain() {
   const type = $("ttype").value, P = {};
   TERRAIN[type].ctl.forEach(([id, , , , , , unit]) => { const v = +$("t_" + id).value; P[id] = v; $("t_" + id + "-v").textContent = (Number.isInteger(v) ? v : v.toFixed(2)) + (unit ? " " + unit : ""); });
   TER = buildTerrain(type, P); TER.type = type; TER.P = P;
+  const zs = TER.pts.filter(q => q[0] > -5 && q[0] < TER.finish + 5).map(q => q[1]);
+  TER.midY = (Math.min(...zs) + Math.max(...zs) + 2 * R) / 2;   // middle of the course height plus a wheel
+  TER.spanY = Math.max(...zs) - Math.min(...zs) + 2 * R + 1;
   const p = TER.pts; let up = 0;
   for (let i = 1; i < p.length && p[i][0] <= TER.finish + R; i++) if (p[i][0] - p[i - 1][0] < 0.05) up = Math.max(up, p[i][1] - p[i - 1][1]);
   $("fEdge").textContent = up > 0.05 ? (up * 10).toFixed(1) + " mm" : "no sharp edge";
@@ -434,16 +437,17 @@ function setHud() {
   else { st.textContent = batchBusy ? "testing…" : paused ? "paused" : "driving"; st.className = "status"; }
 }
 function draw() {
-  const { g, dpr, W: cw, H: ch } = prep($("view")), s = css(), z = +$("zoom").value * dpr;
+  const { g, dpr, W: cw, H: ch } = prep($("view")), s = css();
+  const z = Math.min(+$("zoom").value * dpr, 0.7 * ch / TER.spanY);   // zoom out only if the course is too tall to fit
   const cx = (SIM && $("follow").checked ? SIM.carriage.getPosition().x : START_X) + 0.2 * cw / z;   // wheel at 30% of the width
-  const cy = SIM ? SIM.carriage.getPosition().y * 0.4 + 2 : 3;
-  g.setTransform(z, 0, 0, -z, cw / 2 - cx * z, ch * 0.62 + cy * z);
+  const y0 = ch * 0.58 + TER.midY * z;                  // fixed per terrain: the camera never moves up or down
+  g.setTransform(z, 0, 0, -z, cw / 2 - cx * z, y0);
   const pts = TER.pts;
   g.beginPath(); g.moveTo(pts[0][0], -50); pts.forEach(p => g.lineTo(p[0], p[1])); g.lineTo(pts[pts.length - 1][0], -50); g.closePath();
   g.fillStyle = s.getPropertyValue("--ground"); g.fill();
   g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.strokeStyle = s.getPropertyValue("--ground-line"); g.lineWidth = 1.4 * dpr / z; g.stroke();
   g.setLineDash([0.4, 0.3]); g.lineWidth = 1.5 * dpr / z; g.strokeStyle = s.getPropertyValue("--finish");
-  g.beginPath(); g.moveTo(TER.finish, -1); g.lineTo(TER.finish, 12); g.stroke(); g.setLineDash([]);
+  g.beginPath(); g.moveTo(TER.finish, TER.midY - TER.spanY / 2); g.lineTo(TER.finish, TER.midY + TER.spanY / 2); g.stroke(); g.setLineDash([]);
   if (SIM) {
     g.strokeStyle = s.getPropertyValue("--trail"); g.lineWidth = 1.2 * dpr / z; g.beginPath();
     SIM.trail.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke();
@@ -452,7 +456,7 @@ function draw() {
     g.save(); g.translate(p.x, p.y); drawWheelShape(g, W, SIM.wb.getAngle()); g.restore();
   }
   g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = s.getPropertyValue("--muted"); g.font = `${11 * dpr}px ${s.getPropertyValue("--mono")}`;
-  g.fillText("finish", (TER.finish - cx) * z + cw / 2 + 4 * dpr, ch * 0.62 + cy * z - 12 * z);
+  g.fillText("finish", (TER.finish - cx) * z + cw / 2 + 4 * dpr, y0 - (TER.midY + TER.spanY / 2) * z + 10 * dpr);
   // wheel shape, top right
   const r = 64 * dpr, ix = cw - r - 14 * dpr, iy = r + 14 * dpr, sc = r / (R * 1.15);
   g.fillStyle = s.getPropertyValue("--panel"); g.strokeStyle = s.getPropertyValue("--rule"); g.lineWidth = dpr;
