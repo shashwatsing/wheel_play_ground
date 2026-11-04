@@ -99,7 +99,7 @@ details p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink2); max-width: 1
     <h2>Drive</h2>
     <div class="ctl"><label for="phase">Start angle</label><input id="phase" type="range" min="0" max="359" step="1"><output id="phase-v"></output></div>
     <div class="ctl"><label for="speed">Playback</label><input id="speed" type="range" min="0" max="4" step="1"><output id="speed-v"></output></div>
-    <div class="ctl"><label for="zoom">Zoom</label><input id="zoom" type="range" min="4" max="30" step="1"><output id="zoom-v"></output></div>
+    <div class="ctl"><label for="zoom">Zoom</label><input id="zoom" type="range" min="6" max="50" step="1"><output id="zoom-v"></output></div>
     <div class="row">
       <label><input type="checkbox" id="follow" checked> Camera follows</label>
       <label><input type="checkbox" id="loopOn" checked> Replay when done</label>
@@ -507,7 +507,7 @@ pre.addEventListener("change", () => { const v = PRESETS[pre.value]; if (!v) ret
 W_IDS.forEach(id => $(id).addEventListener("input", () => { pre.value = ""; readWheel(); }));
 [["k", 3], ["cov", 0.55], ["curv", 1], ["anchor", 0.5], ["tilt", 0]].forEach(([id, v]) => $(id).value = v);
 pre.value = "3 feet, 54° gap";
-$("phase").value = 0; $("speed").value = 3; $("zoom").value = 11;
+$("phase").value = 0; $("speed").value = 3; $("zoom").value = 24;
 const outs = () => { $("phase-v").textContent = $("phase").value + "°"; $("speed-v").textContent = SPEEDS[+$("speed").value] + "×"; $("zoom-v").textContent = $("zoom").value; };
 $("phase").addEventListener("input", () => { outs(); dirty = true; });
 $("speed").addEventListener("input", outs);
